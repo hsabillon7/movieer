@@ -1,6 +1,6 @@
 // Importar los módulos necesarios
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image, Dimensions,FlatList } from "react-native";
 import {
   Input,
   Container,
@@ -9,12 +9,17 @@ import {
   H1,
   Button,
   Header,
-  Icon
+  Icon,
+  Spinner,
+  Card,
+  CardItem,
+  H3,
+  Body
 } from "native-base";
 import backend from "../api/backend";
 import getEnvVars from "../../enviroment";
 
-const { apiKey } = getEnvVars();
+const { apiKey, apiImageUrl, apiImageSize } = getEnvVars();
 
 // Obtener los valores por destructuring
 const { width, height } = Dimensions.get("window");
@@ -24,6 +29,7 @@ const MovieListScreen = () => {
   // Maneja el estado de las películas
   const [movies, setMovies] = useState(null);
   const [error, setError] = useState(false);
+  const [search, setSearch] = useState("");
 
   // Promesas y asincronía
   // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Promise
@@ -40,10 +46,22 @@ const MovieListScreen = () => {
     }
   }
 
-  getMovies();
+  // Hook de efecto
+  useEffect(() => {
+    // Efecto secundario realizar la petición a la API
+    getMovies();
+  }, []);
 
   // Documentación de Nativebase
   // https://docs.nativebase.io/Components.html
+  if (!movies) {
+    return (
+      <View style={{flex: 1, justifyContent: "center"}}>
+        <Spinner color="blue" />
+      </View>
+    )
+  }
+
   return (
     <Container>
       <Header searchBar>
@@ -54,14 +72,31 @@ const MovieListScreen = () => {
           <Icon name="search" />
         </Button>
       </Header>
-      <H1 style={{ marginTop: 20 }}>Películas más populares</H1>
       <Image
         source={require("../../assets/movieer_logo.png")}
-        style={styles.movieImage}
+        style={styles.logoApp}
       />
-      <Text>Título de la película</Text>
-      <Text>Valoración</Text>
-      <Text>Resultados totales: {movies.total_results}</Text>
+      <H1 style={{ marginTop: 20 }}>Películas más populares</H1>
+      <FlatList
+        data={movies.results}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={<Text>¡No se han encontrado peliculas!</Text>}
+        renderItem={({ item }) => {
+          return (
+            <View>
+              <Card>
+                <CardItem>
+                  <Body>
+                    <Image source={{ uri: `${apiImageUrl}${apiImageSize}${item.poster_path}` }} style={styles.movieImage} />
+                    <H3>{item.title}</H3>
+                    <Text>{item.vote_average}</Text>
+                  </Body>
+                </CardItem>
+              </Card>
+          </View>
+          )
+        }}
+      />
     </Container>
   );
 };
@@ -87,6 +122,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 15,
   },
+  logoApp: {
+    width: width,
+    height: height * 0.15,
+    resizeMode: "contain"
+  }
 });
 
 export default MovieListScreen;
