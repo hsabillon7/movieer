@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, Image, Dimensions,FlatList } from "react-native
 import {
   Input,
   Container,
-  Form,
   Item,
   H1,
   Button,
@@ -25,7 +24,7 @@ const { apiKey, apiImageUrl, apiImageSize } = getEnvVars();
 const { width, height } = Dimensions.get("window");
 
 // Variable que contiene la pantalla (renderizar)
-const MovieListScreen = () => {
+const MovieListScreen = ({ navigation }) => {
   // Maneja el estado de las películas
   const [movies, setMovies] = useState(null);
   const [error, setError] = useState(false);
@@ -66,9 +65,9 @@ const MovieListScreen = () => {
     <Container>
       <Header searchBar>
         <Item>
-          <Input placeholder="Buscar" />
+          <Input placeholder="Buscar" value={search} onChangeText={setSearch} />
         </Item>
-        <Button icon>
+        <Button icon onPress={() => {navigation.navigate("movieSearch", {search})}}>
           <Icon name="search" />
         </Button>
       </Header>
@@ -85,9 +84,11 @@ const MovieListScreen = () => {
           return (
             <View>
               <Card>
+                <CardItem cardBody>
+                  <Image source={{ uri: `${apiImageUrl}${apiImageSize}${item.poster_path}` }} style={styles.movieImage} />
+                </CardItem>
                 <CardItem>
                   <Body>
-                    <Image source={{ uri: `${apiImageUrl}${apiImageSize}${item.poster_path}` }} style={styles.movieImage} />
                     <H3>{item.title}</H3>
                     <Text>{item.vote_average}</Text>
                   </Body>
@@ -112,9 +113,8 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   movieImage: {
-    width: width,
-    height: height * 0.33,
-    resizeMode: "contain",
+    width: width * 0.99,
+    height: height * 0.5,
   },
   searchInput: {
     flex: 1,
