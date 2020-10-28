@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Container, H1, Spinner } from "native-base";
+import { StyleSheet, View, Text, Dimensions, Image } from "react-native";
+import { Container, H1, Spinner, Card, CardItem, Body, H3 } from "native-base";
 import backend from "../api/backend";
 import getEnvVars from "../../enviroment";
 import { FlatList } from "react-native-gesture-handler";
 
-const { apiUrl, apiKey } = getEnvVars();
+const { apiUrl, apiKey, apiImageUrl, apiImageSize } = getEnvVars();
+
+const { width, height } = Dimensions.get("window");
 
 const MovieSearchResults = ({ route, navigation }) => {
   // Obtener desde los parámetros de la navegación el término de búsqueda
@@ -41,11 +43,47 @@ const MovieSearchResults = ({ route, navigation }) => {
   return (
     <Container>
       <H1>Resultados de la búsqueda: {movies.total_results}</H1>
-      <FlatList />
+      <FlatList
+        data={movies.results}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          return (
+            <View>
+              <Card>
+                <CardItem cardBody>
+                  <Image
+                    source={
+                      item.poster_path ?
+                        ({ uri: `${apiImageUrl}${apiImageSize}${item.poster_path}` })
+                        : require("../../assets/movieer_logo.png")
+                    }
+                    style={item.poster_path ? styles.movieImage : styles.imageNotFound} />
+                </CardItem>
+                <CardItem>
+                  <Body>
+                    <H3>{item.title}</H3>
+                    <Text>{item.vote_average}</Text>
+                  </Body>
+                </CardItem>
+              </Card>
+          </View>
+          )
+        }}
+      />
     </Container>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  movieImage: {
+    width: width * 0.99,
+    height: height * 0.5,
+  },
+  imageNotFound: {
+    width: width * 0.99,
+    height: height * 0.5,
+    resizeMode: "contain"
+  }
+});
 
 export default MovieSearchResults;
