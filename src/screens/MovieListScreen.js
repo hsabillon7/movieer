@@ -17,6 +17,7 @@ import {
 } from "native-base";
 import backend from "../api/backend";
 import getEnvVars from "../../enviroment";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const { apiKey, apiImageUrl, apiImageSize } = getEnvVars();
 
@@ -83,17 +84,19 @@ const MovieListScreen = ({ navigation }) => {
         renderItem={({ item }) => {
           return (
             <View>
-              <Card>
-                <CardItem cardBody>
-                  <Image source={{ uri: `${apiImageUrl}${apiImageSize}${item.poster_path}` }} style={styles.movieImage} />
-                </CardItem>
-                <CardItem>
-                  <Body>
-                    <H3>{item.title}</H3>
-                    <Text>{item.vote_average}</Text>
-                  </Body>
-                </CardItem>
-              </Card>
+              <TouchableOpacity onPress={() => navigation.navigate("movieInfo", {id: item.id})}>
+                <Card>
+                  <CardItem cardBody>
+                    <Image source={{ uri: `${apiImageUrl}${apiImageSize}${item.poster_path}` }} style={styles.movieImage} />
+                  </CardItem>
+                  <CardItem>
+                    <Body>
+                      <H3>{item.title}</H3>
+                      <Text>{item.vote_average}</Text>
+                    </Body>
+                  </CardItem>
+                </Card>
+              </TouchableOpacity>
           </View>
           )
         }}
