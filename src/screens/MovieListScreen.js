@@ -30,6 +30,7 @@ const MovieListScreen = ({ navigation }) => {
   const [movies, setMovies] = useState(null);
   const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
+  const [searchError, setSearchError] = useState(false);
 
   // Promesas y asincronía
   // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Promise
@@ -46,11 +47,27 @@ const MovieListScreen = ({ navigation }) => {
     }
   }
 
+  // Verifica si el usuario ingresa información en el input de búsqueda
+  const handlerSearch = () => {
+    if (!search)
+      setSearchError(true);
+    else
+    {
+      navigation.navigate("movieSearch", { search })
+      setSearchError(false);
+    }
+  }
+
   // Hook de efecto
   useEffect(() => {
     // Efecto secundario realizar la petición a la API
     getMovies();
   }, []);
+
+  // Remueve el valor de error del input de búsqueda si el usuario ingresa información
+  useEffect(() => {
+    if (search) setSearchError(false);
+  }, [search]);
 
   // Documentación de Nativebase
   // https://docs.nativebase.io/Components.html
@@ -66,9 +83,9 @@ const MovieListScreen = ({ navigation }) => {
     <Container>
       <Header searchBar>
         <Item>
-          <Input placeholder="Buscar" value={search} onChangeText={setSearch} />
+          <Input placeholder="Buscar" value={search} onChangeText={setSearch} style={searchError ? styles.inputError : null} />
         </Item>
-        <Button icon onPress={() => {navigation.navigate("movieSearch", {search})}}>
+        <Button icon onPress={handlerSearch}>
           <Icon name="search" />
         </Button>
       </Header>
@@ -129,6 +146,11 @@ const styles = StyleSheet.create({
     width: width,
     height: height * 0.15,
     resizeMode: "contain"
+  },
+  inputError: {
+    borderColor: "red",
+    borderWidth: 1,
+    color: "red"
   }
 });
 
