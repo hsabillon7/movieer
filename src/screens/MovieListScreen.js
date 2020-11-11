@@ -1,6 +1,13 @@
 // Importar los módulos necesarios
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, Dimensions,FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  FlatList,
+} from "react-native";
 import {
   Input,
   Container,
@@ -13,7 +20,7 @@ import {
   Card,
   CardItem,
   H3,
-  Body
+  Body,
 } from "native-base";
 import backend from "../api/backend";
 import getEnvVars from "../../enviroment";
@@ -38,25 +45,26 @@ const MovieListScreen = ({ navigation }) => {
   const getMovies = async () => {
     try {
       // Consultar la API de TheMovieDB
-      const response = await backend.get(`movie/popular?api_key=${apiKey}&language=es-HN&page=1`);
+      const response = await backend.get(
+        `movie/popular?api_key=${apiKey}&language=es-HN&page=1`
+      );
 
       setMovies(response.data);
     } catch (error) {
       // Error al momento de ejecutar la petición a la API
       setError(true);
     }
-  }
+  };
 
   // Verifica si el usuario ingresa información en el input de búsqueda
   const handlerSearch = () => {
-    if (!search)
-      setSearchError(true);
-    else
-    {
-      navigation.navigate("movieSearch", { search })
+    if (!search) setSearchError(true);
+    else {
+      navigation.navigate("movieSearch", { search });
+      setSearch("");
       setSearchError(false);
     }
-  }
+  };
 
   // Hook de efecto
   useEffect(() => {
@@ -73,22 +81,29 @@ const MovieListScreen = ({ navigation }) => {
   // https://docs.nativebase.io/Components.html
   if (!movies) {
     return (
-      <View style={{flex: 1, justifyContent: "center"}}>
+      <View style={{ flex: 1, justifyContent: "center" }}>
         <Spinner color="blue" />
       </View>
-    )
+    );
   }
+
+  // TODO: El botón no es visible en Android
 
   return (
     <Container>
       <Header searchBar>
         <Item>
-          <Input placeholder="Buscar" value={search} onChangeText={setSearch} style={searchError ? styles.inputError : null} />
+          <Input
+            placeholder="Buscar"
+            value={search}
+            onChangeText={setSearch}
+            style={searchError ? styles.inputError : null}
+          />
         </Item>
-        <Button icon onPress={handlerSearch}>
-          <Icon name="search" />
-        </Button>
       </Header>
+      <Button icon onPress={handlerSearch}>
+        <Icon name="search" />
+      </Button>
       <Image
         source={require("../../assets/movieer_logo.png")}
         style={styles.logoApp}
@@ -101,10 +116,19 @@ const MovieListScreen = ({ navigation }) => {
         renderItem={({ item }) => {
           return (
             <View>
-              <TouchableOpacity onPress={() => navigation.navigate("movieInfo", {id: item.id})}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("movieInfo", { id: item.id })
+                }
+              >
                 <Card>
                   <CardItem cardBody>
-                    <Image source={{ uri: `${apiImageUrl}${apiImageSize}${item.poster_path}` }} style={styles.movieImage} />
+                    <Image
+                      source={{
+                        uri: `${apiImageUrl}${apiImageSize}${item.poster_path}`,
+                      }}
+                      style={styles.movieImage}
+                    />
                   </CardItem>
                   <CardItem>
                     <Body>
@@ -114,8 +138,8 @@ const MovieListScreen = ({ navigation }) => {
                   </CardItem>
                 </Card>
               </TouchableOpacity>
-          </View>
-          )
+            </View>
+          );
         }}
       />
     </Container>
@@ -145,13 +169,13 @@ const styles = StyleSheet.create({
   logoApp: {
     width: width,
     height: height * 0.15,
-    resizeMode: "contain"
+    resizeMode: "contain",
   },
   inputError: {
     borderColor: "red",
     borderWidth: 1,
-    color: "red"
-  }
+    color: "red",
+  },
 });
 
 export default MovieListScreen;

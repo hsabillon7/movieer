@@ -8,19 +8,21 @@ const { apiUrl, apiKey, apiImageUrl, apiImageSize } = getEnvVars();
 
 const { width, height } = Dimensions.get("window");
 
-const MovieInfoScreen = ({route, navigation}) => {
+const MovieInfoScreen = ({ route, navigation }) => {
   // Obtener el id de la película
   const { id } = route.params;
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState(false);
 
   // Obtener la información de la película
-  const getMovieInfo = async () => { 
+  const getMovieInfo = async () => {
     try {
-      const response = await backend.get(`${apiUrl}movie/${id}?api_key=${apiKey}&language=es-MX`);
+      const response = await backend.get(
+        `${apiUrl}movie/${id}?api_key=${apiKey}&language=es-MX`
+      );
 
       setMovie(response.data);
-    } catch(error) {
+    } catch (error) {
       setError(true);
     }
   };
@@ -35,7 +37,7 @@ const MovieInfoScreen = ({route, navigation}) => {
       <Content>
         <Spinner />
       </Content>
-    )
+    );
   }
 
   return (
@@ -51,22 +53,20 @@ const MovieInfoScreen = ({route, navigation}) => {
         <Text>Duración: {movie.runtime} minutos</Text>
         <Text>Valoración: {movie.vote_average}</Text>
         <Text>Géneros:</Text>
-        {
-          movie.genres.map((genre) => (
-            <Text key={genre.id}>{genre.name}</Text>
-          ))
-        }
+        {movie.genres.map((genre) => (
+          <Text key={genre.id}>{genre.name}</Text>
+        ))}
       </Card>
     </Content>
   );
-}
+};
 
 const styles = StyleSheet.create({
   moviePoster: {
     width: width,
     height: height * 0.6,
-    resizeMode: "contain"
-  }
+    resizeMode: "contain",
+  },
 });
 
 export default MovieInfoScreen;
