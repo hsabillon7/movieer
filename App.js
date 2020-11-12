@@ -12,10 +12,36 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="movieList">
-        <Stack.Screen name="movieList" component={MovieListScreen} />
-        <Stack.Screen name="movieSearch" component={MovieSearchResultsScreen} />
-        <Stack.Screen name="movieInfo" component={MovieInfoScreen} />
+        <Stack.Screen
+          name="movieList"
+          component={MovieListScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="movieSearch"
+          component={MovieSearchResultsScreen}
+          options={{
+            title: "Resultados",
+            headerStyle: {
+              backgroundColor: "#00a5cf",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="movieInfo"
+          component={MovieInfoScreen}
+          options={{
+            title: "Información",
+            headerStyle: {
+              backgroundColor: "#00a5cf",
+            },
+            headerTintColor: "#fff",
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
-  )
+  );
 }

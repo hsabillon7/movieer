@@ -25,6 +25,7 @@ import {
 import backend from "../api/backend";
 import getEnvVars from "../../enviroment";
 import { TouchableOpacity } from "react-native-gesture-handler";
+// import { format } from "date-fns";
 
 const { apiKey, apiImageUrl, apiImageSize } = getEnvVars();
 
@@ -91,8 +92,8 @@ const MovieListScreen = ({ navigation }) => {
 
   return (
     <Container>
-      <Header searchBar>
-        <Item>
+      <Header searchBar style={styles.header} androidStatusBarColor="#004e64">
+        <Item style={{ flex: 3 }}>
           <Input
             placeholder="Buscar"
             value={search}
@@ -100,18 +101,18 @@ const MovieListScreen = ({ navigation }) => {
             style={searchError ? styles.inputError : null}
           />
         </Item>
+        <Button onPress={handlerSearch} style={styles.searchButton}>
+          <Icon name="search" />
+        </Button>
       </Header>
-      <Button icon onPress={handlerSearch}>
-        <Icon name="search" />
-      </Button>
       <Image
         source={require("../../assets/movieer_logo.png")}
         style={styles.logoApp}
       />
-      <H1 style={{ marginTop: 20 }}>Películas más populares</H1>
+      <H1 style={styles.title}>Películas más populares</H1>
       <FlatList
         data={movies.results}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={<Text>¡No se han encontrado peliculas!</Text>}
         renderItem={({ item }) => {
           return (
@@ -133,6 +134,8 @@ const MovieListScreen = ({ navigation }) => {
                   <CardItem>
                     <Body>
                       <H3>{item.title}</H3>
+                      {/* <Text>{format(new Date(item.release_date), "MM")}</Text> */}
+                      <Text>{item.release_date}</Text>
                       <Text>{item.vote_average}</Text>
                     </Body>
                   </CardItem>
@@ -175,6 +178,20 @@ const styles = StyleSheet.create({
     borderColor: "red",
     borderWidth: 1,
     color: "red",
+  },
+  header: {
+    backgroundColor: "#00a5cf",
+  },
+  searchButton: {
+    flex: 1,
+    backgroundColor: "#7ae582",
+    marginLeft: 10,
+    height: 40,
+  },
+  title: {
+    color: "#00a5cf",
+    textAlign: "center",
+    marginBottom: 5,
   },
 });
 

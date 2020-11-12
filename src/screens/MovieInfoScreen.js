@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Dimensions } from "react-native";
-import { Content, Text, H1, Spinner, Card } from "native-base";
+import {
+  Content,
+  Text,
+  H1,
+  Spinner,
+  Card,
+  H2,
+  View,
+  Badge,
+  Icon,
+} from "native-base";
 import backend from "../api/backend";
 import getEnvVars from "../../enviroment";
+// import { Rating } from "react-native-ratings";
 
 const { apiUrl, apiKey, apiImageUrl, apiImageSize } = getEnvVars();
 
@@ -41,21 +52,43 @@ const MovieInfoScreen = ({ route, navigation }) => {
   }
 
   return (
-    <Content>
-      <H1>{movie.title}</H1>
-      <Card cardBody>
-        <Image
-          source={{ uri: `${apiImageUrl}${apiImageSize}/${movie.poster_path}` }}
-          style={styles.moviePoster}
-        />
+    <Content contentContainerStyle={styles.content}>
+      <Image
+        source={{ uri: `${apiImageUrl}${apiImageSize}/${movie.poster_path}` }}
+        style={styles.moviePoster}
+      />
+      <H1 style={styles.title}>{movie.title}</H1>
+
+      <Card cardBody transparent style={styles.card}>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.movieDetailsValues}>{movie.vote_average}</Text>
+            {/* <Rating
+              showRating
+              ratingCount={movie.vote_average}
+              readonly={true}
+            /> */}
+            <Icon name="star" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.movieDetailsValues}>{movie.runtime}</Text>
+            <Text style={styles.movieDetails}>Duración</Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.movieDetailsValues}>{movie.release_date}</Text>
+            <Text style={styles.movieDetails}>Lanzamiento</Text>
+          </View>
+        </View>
+        <H2 style={styles.h2}>Géneros</H2>
+        <View style={styles.genresView}>
+          {movie.genres.map((genre) => (
+            <Badge key={genre.id} style={styles.genres}>
+              <Text>{genre.name}</Text>
+            </Badge>
+          ))}
+        </View>
+        <H2 style={styles.h2}>Trama</H2>
         <Text>{movie.overview}</Text>
-        <Text>Lanzamiento: {movie.release_date}</Text>
-        <Text>Duración: {movie.runtime} minutos</Text>
-        <Text>Valoración: {movie.vote_average}</Text>
-        <Text>Géneros:</Text>
-        {movie.genres.map((genre) => (
-          <Text key={genre.id}>{genre.name}</Text>
-        ))}
       </Card>
     </Content>
   );
@@ -66,6 +99,44 @@ const styles = StyleSheet.create({
     width: width,
     height: height * 0.6,
     resizeMode: "contain",
+  },
+  title: {
+    textAlign: "center",
+    // color: "#00a5cf",
+    marginTop: 5,
+  },
+  content: {
+    backgroundColor: "#ffffff",
+  },
+  overview: {
+    color: "#00a5cf",
+  },
+  card: {
+    marginLeft: 30,
+    marginRight: 30,
+  },
+  movieDetails: {
+    textAlign: "center",
+    fontSize: 12,
+  },
+  movieDetailsValues: {
+    textAlign: "center",
+    fontSize: 21,
+    fontWeight: "bold",
+  },
+  genres: {
+    backgroundColor: "#25a18e",
+    marginRight: 5,
+    marginBottom: 5,
+  },
+  genresView: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  h2: {
+    marginTop: 10,
+    // color: "#00a5cf",
   },
 });
 
