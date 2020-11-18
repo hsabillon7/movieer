@@ -36,18 +36,18 @@ Una vez que obtengas tu API key, debes crear el archivo <code>enviroment.js</cod
 import Constants from "expo-constants";
 
 const ENV = {
-dev: {
-apiUrl: "https://api.themoviedb.org/3/",
-apiKey: "Tu API key obtenida desde themoviedb.org",
-apiImageUrl: "https://image.tmdb.org/t/p/",
-apiImageSize: "w500",
-},
+  dev: {
+    apiUrl: "https://api.themoviedb.org/3/",
+    apiKey: "Tu API key obtenida desde themoviedb.org",
+    apiImageUrl: "https://image.tmdb.org/t/p/",
+    apiImageSize: "w500",
+  },
 };
 
 const getEnvVars = (env = Constants.manifest.releaseChannel) => {
-if (**DEV**) {
-return ENV.dev;
-}
+  if (__DEV__) {
+    return ENV.dev;
+  }
 };
 
 export default getEnvVars;
