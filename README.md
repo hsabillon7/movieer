@@ -25,7 +25,8 @@ Es una aplicación que te permite conectarte a la API de themoviedb.org y mostra
 
 Clona este repositorio. Necesitas tener instalado <code>node</code>, <code>npm</code> y <code>expo-cli</code> de manera global en tu computadora.
 
-The Movie DB API key: Para que la aplicación pueda funcionar, requieres de una API key válida para poder comunicarte con la API de The Movie DB. Movieer implementa la versión 3 de dicha API.
+The Movie DB API key: <br>
+Para que la aplicación pueda funcionar, requieres de una API key válida para poder comunicarte con la API de The Movie DB. Movieer implementa la versión 3 de dicha API.
 
 Una vez que obtengas tu API key, debes crear el archivo <code>enviroment.js</code> en la raíz del directorio y configurarlo de la siguiente manera:
 <br>
