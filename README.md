@@ -2,8 +2,8 @@
 
 # Movieer
 
-![Website](https://img.shields.io/website?label=alzatuvoz.hn&url=https%3A%2F%2Falzatuvoz.hn)
-![Website](https://img.shields.io/website?label=code%20style&up_color=%23DA63A7&up_message=prettier&url=https%3A%2F%2Fgithub.com%2Fprettier%2Fprettier)
+![Alzatuvoz](https://img.shields.io/website?label=alzatuvoz.hn&url=https%3A%2F%2Falzatuvoz.hn)
+![Prettier](https://img.shields.io/website?label=code%20style&up_color=%23DA63A7&up_message=prettier&url=https%3A%2F%2Fgithub.com%2Fprettier%2Fprettier)
 
 Es una aplicación que te permite conectarte a la API de themoviedb.org y mostrar información sobre las películas más populares, realizar búsquedas y ver la información general sobre una película.
 
