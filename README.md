@@ -32,7 +32,7 @@ Una vez que obtengas tu API key, debes crear el archivo <code>enviroment.js</cod
 <br>
 <br>
 
-```
+```js
 import Constants from "expo-constants";
 
 const ENV = {
