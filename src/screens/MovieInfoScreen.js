@@ -9,11 +9,12 @@ import {
   H2,
   View,
   Badge,
-  Icon,
+  Container,
 } from "native-base";
+import { Rating } from "react-native-ratings";
 import backend from "../api/backend";
 import getEnvVars from "../../enviroment";
-// import { Rating } from "react-native-ratings";
+import { format } from "date-fns";
 
 const { apiUrl, apiKey, apiImageUrl, apiImageSize } = getEnvVars();
 
@@ -52,68 +53,78 @@ const MovieInfoScreen = ({ route, navigation }) => {
   }
 
   return (
-    <Content contentContainerStyle={styles.content}>
-      <Image
-        source={{ uri: `${apiImageUrl}${apiImageSize}/${movie.poster_path}` }}
-        style={styles.moviePoster}
-      />
-      <H1 style={styles.title}>{movie.title}</H1>
+    <Container>
+      <Content contentContainerStyle={styles.content}>
+        <Image
+          source={{ uri: `${apiImageUrl}${apiImageSize}/${movie.poster_path}` }}
+          style={styles.moviePoster}
+        />
 
-      <Card cardBody transparent style={styles.card}>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.movieDetailsValues}>{movie.vote_average}</Text>
-            {/* <Rating
-              showRating
-              ratingCount={movie.vote_average}
-              readonly={true}
-            /> */}
-            <Icon name="star" />
+        <Card cardBody style={styles.card}>
+          <H1 style={styles.title}>{movie.title}</H1>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.movieDetailsValues}>
+                {movie.vote_average}
+              </Text>
+              <Rating
+                showRating={false}
+                ratingCount={10}
+                startingValue={movie.vote_average}
+                readonly={true}
+                imageSize={11}
+                style={{ marginTop: 3 }}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.movieDetailsValues}>{movie.runtime}</Text>
+              <Text style={styles.movieDetails}>Duración</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.movieDetailsValues}>
+                {format(new Date(movie.release_date), "yyyy")}
+              </Text>
+              <Text style={styles.movieDetails}>Lanzamiento</Text>
+            </View>
           </View>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.movieDetailsValues}>{movie.runtime}</Text>
-            <Text style={styles.movieDetails}>Duración</Text>
+          <H2 style={styles.h2}>Géneros</H2>
+          <View style={styles.genresView}>
+            {movie.genres.map((genre) => (
+              <Badge key={genre.id} style={styles.genres}>
+                <Text>{genre.name}</Text>
+              </Badge>
+            ))}
           </View>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.movieDetailsValues}>{movie.release_date}</Text>
-            <Text style={styles.movieDetails}>Lanzamiento</Text>
-          </View>
-        </View>
-        <H2 style={styles.h2}>Géneros</H2>
-        <View style={styles.genresView}>
-          {movie.genres.map((genre) => (
-            <Badge key={genre.id} style={styles.genres}>
-              <Text>{genre.name}</Text>
-            </Badge>
-          ))}
-        </View>
-        <H2 style={styles.h2}>Trama</H2>
-        <Text>{movie.overview}</Text>
-      </Card>
-    </Content>
+          <H2 style={styles.h2}>Trama</H2>
+          <Text>{movie.overview ? movie.overview : "No disponible"}</Text>
+        </Card>
+      </Content>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   moviePoster: {
     width: width,
-    height: height * 0.6,
-    resizeMode: "contain",
+    height: height,
+    // resizeMode: "contain",
   },
   title: {
     textAlign: "center",
-    // color: "#00a5cf",
     marginTop: 5,
   },
   content: {
-    backgroundColor: "#ffffff",
+    // backgroundColor: "#ffffff",
   },
   overview: {
     color: "#00a5cf",
   },
   card: {
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: 15,
+    marginRight: 15,
+    padding: 5,
+    borderRadius: 10,
+    marginTop: -height * 0.2,
   },
   movieDetails: {
     textAlign: "center",
@@ -125,7 +136,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   genres: {
-    backgroundColor: "#25a18e",
+    backgroundColor: "#7ae582",
     marginRight: 5,
     marginBottom: 5,
   },
@@ -133,10 +144,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
+    justifyContent: "center",
   },
   h2: {
     marginTop: 10,
-    // color: "#00a5cf",
+    marginBottom: 10,
   },
 });
 

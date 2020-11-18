@@ -25,7 +25,7 @@ import {
 import backend from "../api/backend";
 import getEnvVars from "../../enviroment";
 import { TouchableOpacity } from "react-native-gesture-handler";
-// import { format } from "date-fns";
+import { format } from "date-fns";
 
 const { apiKey, apiImageUrl, apiImageSize } = getEnvVars();
 
@@ -83,22 +83,22 @@ const MovieListScreen = ({ navigation }) => {
   if (!movies) {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
-        <Spinner color="blue" />
+        <Spinner color="#7ae582" />
       </View>
     );
   }
-
-  // TODO: El botón no es visible en Android
 
   return (
     <Container>
       <Header searchBar style={styles.header} androidStatusBarColor="#004e64">
         <Item style={{ flex: 3 }}>
           <Input
-            placeholder="Buscar"
+            placeholder={
+              searchError ? "Ingresa un valor de búsqueda" : "Buscar..."
+            }
+            placeholderTextColor={searchError ? "red" : "gray"}
             value={search}
             onChangeText={setSearch}
-            style={searchError ? styles.inputError : null}
           />
         </Item>
         <Button onPress={handlerSearch} style={styles.searchButton}>
@@ -132,11 +132,17 @@ const MovieListScreen = ({ navigation }) => {
                     />
                   </CardItem>
                   <CardItem>
-                    <Body>
-                      <H3>{item.title}</H3>
-                      {/* <Text>{format(new Date(item.release_date), "MM")}</Text> */}
-                      <Text>{item.release_date}</Text>
-                      <Text>{item.vote_average}</Text>
+                    <Body style={{ flex: 1, flexDirection: "row" }}>
+                      <View>
+                        <H3>{item.title}</H3>
+                        <Text>
+                          {format(new Date(item.release_date), "yyyy")}
+                        </Text>
+                      </View>
+                      <View style={styles.voteAverage}>
+                        <Icon name="star" style={styles.starIcon} />
+                        <Text>{item.vote_average}</Text>
+                      </View>
                     </Body>
                   </CardItem>
                 </Card>
@@ -174,11 +180,6 @@ const styles = StyleSheet.create({
     height: height * 0.15,
     resizeMode: "contain",
   },
-  inputError: {
-    borderColor: "red",
-    borderWidth: 1,
-    color: "red",
-  },
   header: {
     backgroundColor: "#00a5cf",
   },
@@ -192,6 +193,16 @@ const styles = StyleSheet.create({
     color: "#00a5cf",
     textAlign: "center",
     marginBottom: 5,
+  },
+  voteAverage: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  starIcon: {
+    fontSize: 18,
+    marginRight: 5,
+    color: "#d4af37",
   },
 });
 

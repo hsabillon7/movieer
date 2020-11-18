@@ -23,7 +23,7 @@ export default function App() {
           name="movieSearch"
           component={MovieSearchResultsScreen}
           options={{
-            title: "Resultados",
+            title: "Búsqueda",
             headerStyle: {
               backgroundColor: "#00a5cf",
             },
